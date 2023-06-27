@@ -15,7 +15,7 @@ int p_address(va_list args, char buff[],
 	char extra_c = 0, padd = ' ';
 	int ind = BUFF_SIZE - 2, len = 2, padd_start = 1;
 	unsigned long num_addrs;
-	char map_to[] = "0123456789abdef";
+	char map_to[] = "0123456789abcdef";
 	void *addrs = va_arg(args, void *);
 
 	UNUSED(width);
@@ -68,7 +68,7 @@ int p_non_printchar(va_list args, char buff[],
 	UNUSED(size);
 
 	if (str == NULL)
-		return (write(1, "(nil)", 6));
+		return (write(1, "(null)", 6));
 	while (str[j] != '\0')
 	{
 		if (printable(str[j]))

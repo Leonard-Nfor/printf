@@ -43,7 +43,7 @@ int p_octal_num(va_list args, char buff[],
 	int flags, int width, int precision, int size)
 {
 	int j = BUFF_SIZE - 2;
-	unsigned long int num = va_arg(args, unsigned int);
+	unsigned long int num = va_arg(args, unsigned long int);
 	unsigned long int in_num = num;
 
 	UNUSED(width);
@@ -64,6 +64,22 @@ int p_octal_num(va_list args, char buff[],
 	j++;
 
 	return (unsgnd(0, j, buff, flags, width, precision, size));
+}
+/**
+ * P_hexaldecimal_num - print unsignd num
+ * @args: args
+ * @buff: buffer
+ * @flags: flags
+ * @width: width
+ * @precision: precision
+ * @size: size
+ * Return: Number
+ */
+int p_hexaldecimal_num(va_list args, char buff[],
+	int flags, int width, int precision, int size)
+{
+	return (p_hexa(args, "0123456789abcdef", buff,
+		flags,  'x', width, precision, size));
 }
 /**
  * p_hexa_uppercase - print an usigned int

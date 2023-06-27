@@ -40,7 +40,7 @@ int p_strings(va_list args, char buff[],
 	{
 		s = "(null)";
 		if (precision >= 6)
-			s = "      ";
+			s =  "      ";
 	}
 	while (s[len] != '\0')
 		len++;
@@ -109,7 +109,7 @@ int p_integer(va_list args, char buff[],
 	m = con_size_num(m, size);
 
 	if (m == 0)
-		buff[j--] = '\0';
+		buff[j--] = '0';
 	buff[BUFF_SIZE - 1] = '\0';
 	number = (unsigned long int)m;
 

@@ -9,11 +9,11 @@
  * @size: size specifier
  * Return: printed char
  */
-int hand_write_char(char c, char buff[],
+int handle_write_char(char c, char buff[],
 		int flags, int width, int precision, int size)
 {
 	int j = 0;
-	char padd = ' ';
+	char padd =  ' ';
 
 	UNUSED(precision);
 	UNUSED(size);
@@ -29,6 +29,7 @@ int hand_write_char(char c, char buff[],
 		buff[BUFF_SIZE - 1] = '\0';
 		for (j = 0; j < width - 1; j++)
 			buff[BUFF_SIZE - j - 2] = padd;
+
 		if (flags & F_MINUS)
 			return (write(1, &buff[0], 1) +
 					write(1, &buff[BUFF_SIZE - j - 1], width - 1));
@@ -126,6 +127,55 @@ int numb(int ind, char buff[],
 	return (write(1, &buff[ind], length));
 }
 /**
+ * unsgnd - usigned number
+ * @is_negative: sign indicator
+ * @ind: index
+ * @buff: array
+ * @flags: flags
+ * @width: width
+ * @precision: precision
+ * @size: size
+ * Return: numbers of written char
+ */
+int unsgnd(int is_negative, int ind, char buff[],
+                int flags, int width, int precision, int size)
+{
+        int len = BUFF_SIZE - ind - 1, j = 0;
+        char padd = ' ';
+
+        UNUSED(is_negative);
+        UNUSED(size);
+
+        if (precision == 0 && ind == BUFF_SIZE - 2 && buff[ind] == '0')
+                return (0);
+        if (precision > 0 && precision < len)
+                padd = ' ';
+        while (precision > len)
+        {
+                buff[--ind] = '0';
+                len++;
+        }
+        if ((flags & F_ZERO) && !(flags & F_MINUS))
+                padd = '0';
+        if (width > len)
+        {
+                for (j = 0; j < width - len;  j++)
+                        buff[j] = padd;
+                buff[j] = '\0';
+
+                if (flags & F_MINUS)
+                {
+                        return (write(1, &buff[ind], len) + write(1, &buff[0], j));
+                }
+                else
+                {
+                        return (write(1, &buff[0], j) + write(1, &buff[ind], len));
+                }
+        }
+        return (write(1, &buff[ind], len));
+}
+  
+/**
  * pointer - Writea memory address
  * @buff: array
  * @ind: index
@@ -178,52 +228,4 @@ int pointer(char buff[], int ind, int length,
 		if (extra_c)
 			buff[--ind] = extra_c;
 		return (write(1, &buff[ind], BUFF_SIZE - ind - 1));
-}
-/**
- * usgnd - usigned number
- * @is_negative: sign indicator
- * @ind: index
- * @buff: array
- * @flags: flags
- * @width: width
- * @precision: precision
- * @size: size
- * Return: numbers of written char
- */
-int usgnd(int is_negative, int ind, char buff[],
-		int flags, int width, int precision, int size)
-{
-	int len = BUFF_SIZE - ind - 1, j = 0;
-	char padd = ' ';
-
-	UNUSED(is_negative);
-	UNUSED(size);
-
-	if (precision == 0 && ind == BUFF_SIZE - 2 && buff[ind] == '0')
-		return (0);
-	if (precision > 0 && precision < len)
-		padd = ' ';
-	while (precision > len)
-	{
-		buff[--ind] = '0';
-		len++;
-	}
-	if ((flags & F_ZERO) && !(flags & F_MINUS))
-		padd = '0';
-	if (width > len)
-	{
-		for (j = 0; j < width - len;  j++)
-			buff[j] = padd;
-		buff[j] = '\0';
-
-		if (flags & F_MINUS)
-		{
-			return (write(1, &buff[ind], len) + write(1, &buff[0], j));
-		}
-		else
-		{
-			return (write(1, &buff[0], j) + write(1, &buff[ind], len));
-		}
-	}
-	return (write(1, &buff[ind], len));
 }
